@@ -10,3 +10,6 @@ Schedule Databricks workflow to be run by Prefect
 Please refer to the following link for further info on deployment on prefect workflow
 https://docs.prefect.io/3.0/deploy/index
 
+# Apply on Databricks
+https://docs.prefect.io/integrations/prefect-databricks/index
+
