@@ -6,7 +6,7 @@ from prefect_databricks import DatabricksCredentials
 def test_databricks_connection():
     databricks_credentials = DatabricksCredentials.load("my-databricks-block")
     host = "https://adb-2661458153180226.6.azuredatabricks.net"
-    token = databricks_credentials.__dict__.get("token")
+    token = "dapi4d5c313e496ebec70d0f77afc2474391-2"
     
     if not host or not token:
         print("Failed to retrieve host or token from credentials.")

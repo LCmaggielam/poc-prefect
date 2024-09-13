@@ -1,13 +1,20 @@
 import requests
+import yaml
 from prefect import flow, task
+from prefect.schedules import CronSchedule
 from prefect_databricks import DatabricksCredentials
 
+# Load schedule configuration from YAML
+def load_schedule():
+    with open("schedules.yaml", "r") as file:
+        config = yaml.safe_load(file)
+    return config["schedules"]
 
 @task
 def test_databricks_connection():
     databricks_credentials = DatabricksCredentials.load("my-databricks-block")
     host = "https://adb-2661458153180226.6.azuredatabricks.net"
-    token ="dapi4d5c313e496ebec70d0f77afc2474391-2"
+    token = "dapi4d5c313e496ebec70d0f77afc2474391-2"
     
     if not host or not token:
         print("Failed to retrieve host or token from credentials.")
@@ -67,23 +74,21 @@ def run_databricks_job(job_id):
         print("Failed to run job:", e)
         return None
 
-@flow(name="S_OOMS_flow")
-def databricks_workflow():
-    if test_databricks_connection():
-        print("Successfully connected to Databricks.")
-        jobs = list_databricks_jobs()  # Get the list of jobs
-        if jobs:
-            # For example, run the first job in the list
-            job_id_to_run = 1092601105688152  # Change index as needed
-            run_databricks_job(job_id_to_run)
-    else:
-        print("Failed to connect to Databricks.")
+# Load the schedule and create flows dynamically
+schedules = load_schedule()
+
+for schedule in schedules:
+    @flow(schedule=CronSchedule(cron=schedule['cron']))
+    def databricks_workflow():
+        if test_databricks_connection():
+            print("Successfully connected to Databricks.")
+            jobs = list_databricks_jobs()  # Get the list of jobs
+            if jobs:
+                # For example, run the first job in the list
+                job_id_to_run = 1092601105688152  # Change index as needed
+                run_databricks_job(job_id_to_run)
+        else:
+            print("Failed to connect to Databricks.")
 
 if __name__ == "__main__":
-    databricks_workflow.serve(
-        name="s-ooms-deployment",
-        cron="0 7 * * *",  # Set to run at 7:00 AM every day
-        tags=["testing", "tutorial"],
-        description="Given a GitHub repository, logs repository statistics for that repo.",
-        version="tutorial/deployments",
-    )
+    databricks_workflow()
