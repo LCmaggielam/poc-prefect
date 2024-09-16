@@ -7,8 +7,8 @@ from pydantic import BaseModel, SecretStr
 @task
 def test_databricks_connection():
     databricks_credentials = DatabricksCredentials.load("my-databrickv2")
-    host = "https://adb-2661458153180226.6.azuredatabricks.net"
-    token ="dapi4d5c313e496ebec70d0f77afc2474391-2"
+    host = databricks_credentials.databricks_instance
+    token =databricks_credentials.token
     
     if not host or not token:
         print("Failed to retrieve host or token from credentials.")
@@ -21,7 +21,7 @@ def list_databricks_jobs():
     databricks_credentials = DatabricksCredentials.load("my-databrickv2")
     host = databricks_credentials.databricks_instance
     
-    #token = "dapi4d5c313e496ebec70d0f77afc2474391-2"
+    
     token = databricks_credentials.token
     print(type(token))
     #print(f"Using token: {token}")
@@ -54,7 +54,9 @@ def run_databricks_job(job_id):
     databricks_credentials = DatabricksCredentials.load("my-databrickv2")
     host = databricks_credentials.databricks_instance
     
-    token = "dapi4d5c313e496ebec70d0f77afc2474391-2"
+    token = databricks_credentials.token
+    if isinstance(token, SecretStr):
+        token = token.get_secret_value()
     url = f"{host}/api/2.0/jobs/run-now"
     headers = {
         "Authorization": f"Bearer {token}",
