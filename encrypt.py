@@ -1,6 +1,7 @@
 import requests
 from prefect import flow, task
 from prefect_databricks import DatabricksCredentials
+from pydantic import BaseModel, SecretStr
 
 
 @task
@@ -20,8 +21,15 @@ def list_databricks_jobs():
     databricks_credentials = DatabricksCredentials.load("my-databrickv2")
     host = databricks_credentials.databricks_instance
     
-    token = "dapi4d5c313e496ebec70d0f77afc2474391-2"
-    print(f"Using token: {token}")
+    #token = "dapi4d5c313e496ebec70d0f77afc2474391-2"
+    token = databricks_credentials.token
+    print(type(token))
+    #print(f"Using token: {token}")
+    
+    if isinstance(token, SecretStr):
+        token = token.get_secret_value()  # Convert to string
+
+    #print(f"Using token: {token}")
 
     url = f"{host}/api/2.0/jobs/list"
     headers = {
@@ -81,4 +89,10 @@ def databricks_workflow():
         
 
 if __name__ == "__main__":
-    databricks_workflow()
+    databricks_workflow.serve(
+        name="s-ooms-deployment",
+        cron="0 7 * * *",  # Set to run at 7:00 AM every day
+        tags=["testing", "tutorial"],
+        description="Given a GitHub repository, logs repository statistics for that repo.",
+        version="tutorial/deployments",
+    )
