@@ -11,7 +11,9 @@ Please refer to the following link for further info on deployment on prefect wor
 https://docs.prefect.io/3.0/automate/add-schedules
 
 # Apply on Databricks
+1. Installation of prefect-databricks
 https://docs.prefect.io/integrations/prefect-databricks/index
+
 
 # Advantage comparing to Airflow
 1. More clear UI, Some settings can be change and set up without coding(user-friendly for user dont have coding knowledge)
