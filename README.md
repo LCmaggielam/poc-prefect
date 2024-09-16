@@ -13,3 +13,5 @@ https://docs.prefect.io/3.0/automate/add-schedules
 # Apply on Databricks
 https://docs.prefect.io/integrations/prefect-databricks/index
 
+# Advantage comparing to Airflow
+More clear UI, Some setting can be change and set up without coding(user-friendly for user dont have coding knowledge)

@@ -5,7 +5,7 @@ from prefect_databricks import DatabricksCredentials
 
 @task
 def test_databricks_connection():
-    databricks_credentials = DatabricksCredentials.load("my-databricks-block")
+    databricks_credentials = DatabricksCredentials.load("my-databrickv2")
     host = "https://adb-2661458153180226.6.azuredatabricks.net"
     token ="dapi4d5c313e496ebec70d0f77afc2474391-2"
     
@@ -17,8 +17,8 @@ def test_databricks_connection():
 
 @task
 def list_databricks_jobs():
-    databricks_credentials = DatabricksCredentials.load("my-databricks-block")
-    host = "https://adb-2661458153180226.6.azuredatabricks.net"
+    databricks_credentials = DatabricksCredentials.load("my-databrickv2")
+    host = databricks_credentials.databricks_instance
     
     token = "dapi4d5c313e496ebec70d0f77afc2474391-2"
     print(f"Using token: {token}")
@@ -43,8 +43,8 @@ def list_databricks_jobs():
 
 @task
 def run_databricks_job(job_id):
-    databricks_credentials = DatabricksCredentials.load("my-databricks-block")
-    host = "https://adb-2661458153180226.6.azuredatabricks.net"
+    databricks_credentials = DatabricksCredentials.load("my-databrickv2")
+    host = databricks_credentials.databricks_instance
     
     token = "dapi4d5c313e496ebec70d0f77afc2474391-2"
     url = f"{host}/api/2.0/jobs/run-now"
@@ -81,10 +81,4 @@ def databricks_workflow():
         
 
 if __name__ == "__main__":
-    databricks_workflow.serve(
-        name="s-ooms-deployment",
-        cron="0 7 * * *",  # Set to run at 7:00 AM every day
-        tags=["testing", "tutorial"],
-        description="Given a GitHub repository, logs repository statistics for that repo.",
-        version="tutorial/deployments",
-    )
+    databricks_workflow()
