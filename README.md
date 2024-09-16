@@ -12,6 +12,7 @@ https://docs.prefect.io/3.0/automate/add-schedules
 
 # Apply on Databricks
 1. Installation of prefect-databricks
+
 https://docs.prefect.io/integrations/prefect-databricks/index
 
 
