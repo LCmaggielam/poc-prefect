@@ -14,6 +14,6 @@ https://docs.prefect.io/3.0/automate/add-schedules
 https://docs.prefect.io/integrations/prefect-databricks/index
 
 # Advantage comparing to Airflow
-More clear UI, Some settings can be change and set up without coding(user-friendly for user dont have coding knowledge)
-The Databricks token can be encrypted by using the block function in Prefect Server 
+1. More clear UI, Some settings can be change and set up without coding(user-friendly for user dont have coding knowledge)
+2. The Databricks token can be encrypted by using the block function in Prefect Server 
 
