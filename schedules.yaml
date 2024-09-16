@@ -1,8 +1,0 @@
-version: 3.0
-deployments:
-  - name: Databricks Flow
-    flow: databricks-workflow.tall-beluga  # Specify the flow path
-    schedule:
-      cron: "0 7 * * *"  # Optional: Set a schedule
-    tags:
-      - my-tag  # Optional: Add tags
